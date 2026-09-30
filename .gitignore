@@ -1,0 +1,6 @@
+
+# SageCLI state and secrets
+.sage/
+*.env
+.env.*
+!*.env.example
