@@ -1,7 +1,7 @@
-from setuptools import setup,find_packages
+from setuptools import setup, find_packages
 
 setup(
-    name="Sentiment Intelligence",
+    name="sentiment_intelligence",
     version='1.0.0',
     author="mdzaheerjk",
     author_email="zaheerjkxai@gmail.com",

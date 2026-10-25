@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const outputDiv = document.getElementById("output");
   const API_KEY = 'AIzaSyAHxO8ZCKPLODbhgSQcDV49Bv8cgkOA8Z4';  // Replace with your actual YouTube Data API key
   // const API_URL = 'http://my-elb-2062136355.us-east-1.elb.amazonaws.com:80';   
-  const API_URL = 'http://localhost:5000/';
+  const API_URL = 'http://localhost:5000';
 
   // Get the current tab's URL
   chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const sentimentData = []; // For trend graph
         const totalSentimentScore = predictions.reduce((sum, item) => sum + parseInt(item.sentiment), 0);
         predictions.forEach((item, index) => {
-          sentimentCounts[item.sentiment]++;
+          sentimentCounts[item.sentiment] = (sentimentCounts[item.sentiment] || 0) + 1;
           sentimentData.push({
             timestamp: item.timestamp,
             sentiment: parseInt(item.sentiment)
@@ -42,8 +42,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const totalComments = comments.length;
         const uniqueCommenters = new Set(comments.map(comment => comment.authorId)).size;
         const totalWords = comments.reduce((sum, comment) => sum + comment.text.split(/\s+/).filter(word => word.length > 0).length, 0);
-        const avgWordLength = (totalWords / totalComments).toFixed(2);
-        const avgSentimentScore = (totalSentimentScore / totalComments).toFixed(2);
+        const avgWordLength = totalComments > 0 ? (totalWords / totalComments).toFixed(2) : "0.00";
+        const avgSentimentScore = totalComments > 0 ? (totalSentimentScore / totalComments).toFixed(2) : "0.00";
 
         // Normalize the average sentiment score to a scale of 0 to 10
         const normalizedSentimentScore = (((parseFloat(avgSentimentScore) + 1) / 2) * 10).toFixed(2);
